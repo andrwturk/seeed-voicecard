@@ -1075,6 +1075,8 @@ static int ac108_trigger(struct snd_pcm_substream *substream, int cmd,
 		spin_unlock_irqrestore(&ac10x->lock, flags);
 
 		/* delayed clock starting, move to machine trigger() */
+		ac108_set_clock(1, NULL, 0, NULL);
+
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
 	case SNDRV_PCM_TRIGGER_SUSPEND:
@@ -1082,6 +1084,8 @@ static int ac108_trigger(struct snd_pcm_substream *substream, int cmd,
 		if (ac10x->i2c101 && _MASTER_MULTI_CODEC == _MASTER_AC101) {
 			ac101_trigger(substream, cmd, dai);
 		}
+		
+		ac108_set_clock(0, NULL, 0, NULL);
 		break;
 	default:
 		ret = -EINVAL;
